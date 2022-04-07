@@ -9,7 +9,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
     name="stashapp-tools",
-    version="0.1.1",
+    version="main",
     description="A python library for interfacing with a stashapp's API",
     long_description=README,
     long_description_content_type="text/markdown",

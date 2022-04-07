@@ -13,7 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Checks-out repository under $GITHUB_WORKSPACE
-      - uses: actions/checkout@v2
+      - name: "Checkout repository and submodules"
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
 
       # Set up python
       - uses: actions/setup-python@v2

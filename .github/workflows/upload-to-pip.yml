@@ -24,16 +24,15 @@ jobs:
           python-version: 3.8
 
       # Set package version number
-      - name: Autobump version
+      - name: Set version number to release number
         run: |
-          # from refs/tags/v1.2.3 get 1.2.3
-          VERSION=$(echo $GITHUB_REF | sed 's#.*/v##')
+          VERSION=${{github.event.release.tag_name}}
           PLACEHOLDER='version="main"'
           VERSION_FILE='setup.py'
           # ensure the placeholder is there. If grep doesn't find the placeholder
           # it exits with exit code 1 and github actions aborts the build. 
           grep "$PLACEHOLDER" "$VERSION_FILE"
-          sed -i "s/$PLACEHOLDER/__version__ = \"${VERSION}\"/g" "$VERSION_FILE"
+          sed -i "s/$PLACEHOLDER/version = \"${VERSION}\"/g" "$VERSION_FILE"
         shell: bash
 
       # Install dependencies

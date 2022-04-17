@@ -4,7 +4,7 @@ This library primarily serves as a API wrapper for [Stash](https://github.com/st
 ### Usage
 ```python
 import stashapi.log as log
-from stashapi.interface import StashInterface
+from stashapi.stashapp import StashInterface
 
 stash = StashInterface({
     "scheme": "http",

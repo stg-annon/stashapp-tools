@@ -23,11 +23,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
       with:
-        submodules: recursive
+        submodules: true
       
     # Update submodule
     - name: Git Sumbodule Update
-      run: git pull --recurse-submodules
+      run: git submodule update --remote --recursive
 
     # Commit updates
     - name: Commit update

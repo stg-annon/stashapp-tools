@@ -1,0 +1,80 @@
+name: Sync and publish to PIP
+
+on:
+  # Triggers the workflow when a release is created
+  release: 
+    types: [created]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  # sync submodule repos
+  sync:
+    name: 'Submodules Sync'
+    runs-on: ubuntu-latest
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        submodules: true
+
+    # Update references
+    - name: Git Sumbodule Update
+      run: |
+        git pull --recurse-submodules
+        git submodule update --remote --recursive
+    - name: Commit update
+      run: |
+        git config --global user.name 'Git bot'
+        git config --global user.email 'bot@noreply.github.com'
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+        git commit -am "Auto updated submodule references" && git push || echo "No changes to commit"
+
+  # upload current state of repo to PIP
+  upload:
+    needs: sync
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out repository under $GITHUB_WORKSPACE
+      - name: "Checkout repository and submodules"
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      # Set up python
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      # Set package version number
+      - name: Set version number to release number
+        run: |
+          VERSION=${{github.event.release.tag_name}}
+          PLACEHOLDER='version="main"'
+          VERSION_FILE='setup.py'
+          # ensure the placeholder is there. If grep doesn't find the placeholder
+          # it exits with exit code 1 and github actions aborts the build. 
+          grep "$PLACEHOLDER" "$VERSION_FILE"
+          sed -i "s/$PLACEHOLDER/version = \"${VERSION}\"/g" "$VERSION_FILE"
+        shell: bash
+
+      # Install dependencies
+      - name: "Install dependencies"
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install setuptools wheel twine
+      # Build and upload to PyPI
+      - name: "Build and upload to PyPI"
+        run: |
+          python3 setup.py sdist bdist_wheel
+          python3 -m twine upload dist/* --verbose
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.TWINE_TOKEN }}

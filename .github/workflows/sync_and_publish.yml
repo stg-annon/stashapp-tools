@@ -20,16 +20,14 @@ jobs:
 
     steps:
     # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
+    - name: Checkout repository
       uses: actions/checkout@v2
-      with:
-        submodules: true
-
+      
     # Update references
-    - name: Git Sumbodule Update
-      run: |
-        git pull origin main --recurse-submodules
-        git submodule update --remote --recursive
+    - name: Checkout submodules
+      run: git submodule update --remote --recursive
+
+    # Commit updates
     - name: Commit update
       run: |
         git config --global user.name 'Git bot'

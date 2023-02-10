@@ -5,7 +5,12 @@ This library primarily serves as a API wrapper for [Stash](https://github.com/st
 Developed using python 3.10.X with attempts to make things as backwards compatible where possible, if you are having issues please try using python 3.10
 
 ## Installation 
+
+##### To install from PyPI use this command:
 `pip install stashapp-tools`
+
+##### To install directly from this repo use this command:
+`pip install git+https://github.com/stg-annon/stashapp-tools`
 
 ## Usage
 ```python

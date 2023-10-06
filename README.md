@@ -19,7 +19,7 @@ from stashapi.stashapp import StashInterface
 
 stash = StashInterface({
     "scheme": "http",
-    "domain":"localhost",
+    "host":"localhost",
     "port": "9999",
     "logger": log
 })

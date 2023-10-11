@@ -2,7 +2,7 @@
 This library primarily serves as a API wrapper for [Stash](https://github.com/stashapp/stash) written in python
 
 ## Requirements
-Developed using python 3.10.X with attempts to make things as backwards compatible where possible, if you are having issues please try using python 3.10
+Developed using python 3.11.X with attempts to make things as backwards compatible where possible, if you are having issues please try using python 3.11
 
 ## Installation 
 

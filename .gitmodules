@@ -1,4 +1,4 @@
 [submodule "stashapi"]
 	path = stashapi
 	url = https://github.com/stg-annon/stashapi.git
-	branch = main
+	branch = tools-sm
